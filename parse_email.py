@@ -13,7 +13,7 @@ def parse_email(file):
         "from": eml_data["From"],
         "to": eml_data["To"],
         "date": eml_data["Date"],
-        "body": body.get_content() if body else "No body exists"
+        "body": strip_html(body.get_content()) if body else "No body exists"
     }
 
 class StripHTML(HTMLParser):
