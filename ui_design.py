@@ -2,33 +2,30 @@
 import customtkinter as ctk
 import parse_email
 
+class EmailViewUI(ctk.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        self.email_ui()
 
-def main_ui(app):
-    x=1177
-    y=625
-    app.title("Email Reader")
-    app.geometry(f"{x}x{y}")
+    def email_ui(self):
+        self.subject_label = ctk.CTkLabel(self, text="Subject: ")
+        self.subject_label.pack()
+        self.from_label = ctk.CTkLabel(self, text="From: ")
+        self.from_label.pack()
+        self.to_label = ctk.CTkLabel(self, text="To: ")
+        self.to_label.pack()
+        self.date_label = ctk.CTkLabel(self, text="Date: ")
+        self.date_label.pack()
+        self.body_textbox = ctk.CTkTextbox(self, width=380, height=200)
+        self.body_textbox.pack(pady=10)
 
-def open_file_ui(app, ctk, open_file, widgets):
-    open_file_btn = ctk.CTkButton(app, text="Open file", command=lambda: open_file(widgets))
-    open_file_btn.pack(pady=100)
-
-def email_ui(app):
-    widgets = {}
-    widgets["subject_label"] = ctk.CTkLabel(app, text="Subject: ")
-    widgets["subject_label"].pack()
-    widgets["from_label"] = ctk.CTkLabel(app, text="From: ")
-    widgets["from_label"].pack()
-    widgets["to_label"] = ctk.CTkLabel(app, text="To: ")
-    widgets["to_label"].pack()
-    widgets["date_label"] = ctk.CTkLabel(app, text="Date: ")
-    widgets["date_label"].pack()
-    widgets["body_textbox"] = ctk.CTkTextbox(app, width=380, height=200)
-    widgets["body_textbox"].pack(pady=10)
-    return widgets
-
-# def main_theme(ctk, app):
-#     ctk.set_default_color_theme(f"{project_root}/assets/theme.json")
-#     open_file_btn = ctk.CTkButton(app, text="Open file", command=open_file)
-#     open_file_btn.pack(pady=100)
+    def update_email(self, email_data):
+        self.subject_label.configure(text=f"Subject: {email_data['subject']}")
+        self.from_label.configure(text=f"From: {email_data['from']}")
+        self.to_label.configure(text=f"To: {email_data['to']}")
+        self.date_label.configure(text=f"Date: {email_data['date']}")
+        self.body_textbox.configure(state="normal")
+        self.body_textbox.delete("1.0", "end")
+        self.body_textbox.insert("1.0", email_data['body'])
+        self.body_textbox.configure(state="disabled")
 

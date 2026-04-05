@@ -5,28 +5,32 @@ import parse_email
 import ui_design
 
 
-project_root = pathlib.Path(__file__).parent
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.x=1180
+        self.y=630
+        self.title("Email Reader")
+        self.geometry(f"{self.x}x{self.y}")
 
+        # setup theme
+        project_root = pathlib.Path(__file__).parent
+        theme_file = f"{project_root}/assets/theme.json"
+        ctk.set_default_color_theme(theme_file)
 
-app = ctk.CTk()
+        # open file button
+        open_file_btn = ctk.CTkButton(self, text="Open file", command=self.open_file)
+        open_file_btn.pack(pady=100)
 
-def open_file(widgets):
-    file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
-    if file_path:
-        email_data = parse_email.parse_email(file_path)
-        widgets["subject_label"].configure(text=f"Subject: {email_data['subject']}")
-        widgets["from_label"].configure(text=f"From: {email_data['from']}")
-        widgets["to_label"].configure(text=f"To: {email_data['to']}")
-        widgets["date_label"].configure(text=f"Date: {email_data['date']}")
-        widgets["body_textbox"].configure(state="normal")
-        widgets["body_textbox"].delete("1.0", "end")
-        widgets["body_textbox"].insert("1.0", email_data['body'])
-        widgets["body_textbox"].configure(state="disabled")
+        # email view
+        self.email_view = ui_design.EmailViewUI(self)
+        self.email_view.pack()
 
+    def open_file(self):
+        file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
+        if file_path:
+            email_data = parse_email.parse_email(file_path)
+            self.email_view.update_email(email_data)
 
-# import ui from ui_design.py
-ui_design.main_ui(app)
-ctk.set_default_color_theme(f"{project_root}/assets/theme.json")
-ui_widgets = ui_design.email_ui(app)
-ui_design.open_file_ui(app, ctk, open_file, ui_widgets)
+app = App()
 app.mainloop()
