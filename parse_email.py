@@ -16,3 +16,19 @@ def parse_email(file):
         "date": eml_data["Date"],
         "body": body.get_content() if body else "No body exists"
     }
+
+class StripHTML(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.text = []
+
+    def handle_data(self, data):
+        self.text.append(data)
+
+    def get_text(self):
+        return "".join(self.text).strip()
+
+def strip_html(html):
+    stripper = StripHTML()
+    stripper.feed(html)
+    return stripper.get_text()
