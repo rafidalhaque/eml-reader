@@ -1,7 +1,6 @@
 from email import message, parser, policy, contentmanager, header
 from pathlib import Path
-
-project_root = Path(__file__).parent
+from html.parser import HTMLParser
 
 def parse_email(file):
     with open(file, "rb") as f:
