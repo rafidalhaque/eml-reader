@@ -1,4 +1,7 @@
 # ui_design.py
+from cmath import exp
+from textwrap import fill
+
 import customtkinter as ctk
 import parse_email
 
@@ -8,16 +11,17 @@ class EmailViewUI(ctk.CTkFrame):
         self.email_ui()
 
     def email_ui(self):
-        self.subject_label = ctk.CTkLabel(self, text="Subject: ")
-        self.subject_label.pack()
-        self.from_label = ctk.CTkLabel(self, text="From: ")
-        self.from_label.pack()
-        self.to_label = ctk.CTkLabel(self, text="To: ")
+        self.label_font = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
+        self.subject_label = ctk.CTkLabel(self, text="Subject: ", font=self.label_font)
+        self.subject_label.pack(fill="both", expand=True)
+        self.from_label = ctk.CTkLabel(self, text="From: ", font=self.label_font)
+        self.from_label.pack(fill="both", expand=True)
+        self.to_label = ctk.CTkLabel(self, text="To: ", font=self.label_font)
         self.to_label.pack()
-        self.date_label = ctk.CTkLabel(self, text="Date: ")
+        self.date_label = ctk.CTkLabel(self, text="Date: ", font=self.label_font)
         self.date_label.pack()
-        self.body_textbox = ctk.CTkTextbox(self, width=380, height=200)
-        self.body_textbox.pack(pady=10)
+        self.body_textbox = ctk.CTkTextbox(self, height=500, font=self.label_font)
+        self.body_textbox.pack(pady=10, fill="both", expand=True)
 
     def update_email(self, email_data):
         self.subject_label.configure(text=f"Subject: {email_data['subject']}")
@@ -33,7 +37,8 @@ class RecentFilesView(ctk.CTkFrame):
     def __init__(self, master, on_file_select, **kwargs):
         super().__init__(master, **kwargs)
         self.on_file_select = on_file_select
-        self.recent_files_frame = ctk.CTkScrollableFrame(self, label_text="Recent Files")
+        self.font_family = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
+        self.recent_files_frame = ctk.CTkScrollableFrame(self, label_text="Recent Files", fg_color="transparent", label_font=self.font_family, label_fg_color="transparent")
         self.recent_files_frame.pack(fill="both", expand=True)
 
     def populate_recent_files(self, recent_files):
@@ -44,8 +49,9 @@ class RecentFilesView(ctk.CTkFrame):
             id, filename, file_path, opened_at = file
             hidden_btn = ctk.CTkButton(
                 self.recent_files_frame,
-                text=f"{filename}\t{opened_at}\n{file_path}",
+                text=f"{filename}\t\t{opened_at}\n{file_path}",
+                font=(self.font_family, 13),
                 command=lambda p=file_path: self.on_file_select(p)
             )
-            hidden_btn.pack(fill="x", pady=2)
+            hidden_btn.pack(fill="x", pady=5)
 
