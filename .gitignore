@@ -1,0 +1,6 @@
+.idea
+.venv
+build/
+db/
+dist/
+*/*.eml
