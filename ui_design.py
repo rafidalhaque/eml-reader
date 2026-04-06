@@ -22,6 +22,7 @@ class EmailViewUI(ctk.CTkFrame):
         self.date_label.pack()
         self.body_textbox = ctk.CTkTextbox(self, height=500, font=self.label_font)
         self.body_textbox.pack(pady=10, fill="both", expand=True)
+        self.body_textbox.configure(state="disabled")
 
     def update_email(self, email_data):
         self.subject_label.configure(text=f"Subject: {email_data['subject']}")
