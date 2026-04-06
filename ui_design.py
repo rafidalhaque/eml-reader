@@ -56,3 +56,27 @@ class RecentFilesView(ctk.CTkFrame):
             )
             hidden_btn.pack(fill="x", pady=5)
 
+class ErrorDialogue(ctk.CTkToplevel):
+    def __init__(self, parent, title="Error", message="An Error Occured", **kwargs):
+        super().__init__(parent, **kwargs)
+        self.title(title)
+        self.geometry("400x200")
+        self.resizable(False, False)
+        self.grab_set()
+
+        self.label_font = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
+        self.message_label = ctk.CTkLabel(self, text=message, font=self.label_font, anchor="w", wraplength=300)
+        self.message_label.pack(padx=20, pady=(20, 5),expand=True)
+        self.ok_button = ctk.CTkButton(self, text="OK", font=self.label_font, command=self.destroy)
+        self.ok_button.pack(pady=(0, 20))
+
+class ToplevelWindow(ctk.CTkToplevel):
+    def __init__(self, parent, **kwargs):
+        super().__init__(parent, **kwargs)
+        self.geometry("400x300")
+        self.label = ctk.CTkLabel(self, text="Top")
+        self.label.pack(fill="x", expand=True)
+
+    def show_error(self, title, message):
+        ErrorDialogue(self, title=title, message=message)
+

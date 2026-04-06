@@ -46,14 +46,23 @@ class App(ctk.CTk):
 
     def open_file(self):
         file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
-        if file_path:
-            filename = os.path.basename(file_path)
-            self.db.save_recent_files(filename, file_path)
+        if not file_path:
+            return
+        filename = os.path.basename(file_path)
+        self.db.save_recent_files(filename, file_path)
+        try:
             email_data = parse_email.parse_email(file_path)
-            self.email_view.update_email(email_data)
+        except FileNotFoundError:
+            ui_design.ErrorDialogue(self, "Email File Not Found", f"{file_path} Not Found")
+            return
+        self.email_view.update_email(email_data)
 
     def load_from_recent_files(self, file_path):
-        email_data = parse_email.parse_email(file_path)
+        try:
+            email_data = parse_email.parse_email(file_path)
+        except FileNotFoundError:
+            ui_design.ErrorDialogue(self, "Email File Not Found", f"{file_path} Not Found")
+            return
         self.email_view.update_email(email_data)
 
     def refresh_recent_files(self):

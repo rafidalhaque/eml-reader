@@ -2,6 +2,9 @@ from email import message, parser, policy, contentmanager, header
 from pathlib import Path
 from html.parser import HTMLParser
 
+from ui_design import ToplevelWindow
+
+
 class StripHTML(HTMLParser):
     def __init__(self):
         super().__init__()
