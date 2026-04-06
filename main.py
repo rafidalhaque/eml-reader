@@ -44,6 +44,10 @@ class App(ctk.CTk):
 
         self.refresh_recent_files()
 
+        # about button
+        about_btn = ctk.CTkButton(self, text="About", font=self.label_font, command=lambda: ui_design.AboutDialogue(self))
+        about_btn.grid(row=2, column=0, sticky="e", padx=10, pady=5, ipadx=10)
+
     def open_file(self):
         file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
         if not file_path:
@@ -53,7 +57,7 @@ class App(ctk.CTk):
         try:
             email_data = parse_email.parse_email(file_path)
         except FileNotFoundError:
-            ui_design.ErrorDialogue(self, "Email File Not Found", f"{os.path.basename(file_path)} Not Found")
+            ui_design.ErrorDialogue(self, "File Not Found", f"{os.path.basename(file_path)} file not found")
             return
         self.email_view.update_email(email_data)
 
@@ -61,7 +65,7 @@ class App(ctk.CTk):
         try:
             email_data = parse_email.parse_email(file_path)
         except FileNotFoundError:
-            ui_design.ErrorDialogue(self, "Email File Not Found", f"{os.path.basename(file_path)} Not Found")
+            ui_design.ErrorDialogue(self, "File Not Found", f"{os.path.basename(file_path)} file not found")
             return
         self.email_view.update_email(email_data)
 

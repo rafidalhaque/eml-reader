@@ -3,7 +3,7 @@ from cmath import exp
 from textwrap import fill
 
 import customtkinter as ctk
-import parse_email
+import webbrowser
 
 class EmailViewUI(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
@@ -55,6 +55,30 @@ class RecentFilesView(ctk.CTkFrame):
                 command=lambda p=file_path: self.on_file_select(p)
             )
             hidden_btn.pack(fill="x", pady=5)
+
+class AboutDialogue(ctk.CTkToplevel):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        self.title("Email Reader")
+        self.geometry("400x300")
+        self.resizable(True, True)
+        self.grab_set()
+
+        self.label_font = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
+        self.heading = ctk.CTkLabel(self, text="About Email Reader", font=(self.label_font, 18), anchor="n", wraplength=250)
+        self.heading.grid(row=0, column=0, columnspan=2, pady=(20, 10))
+        self.text = """
+        Email Reader is a GUI software build with python3 and customtkinter. It allows user to read .eml file. 
+        """
+        self.about_text = ctk.CTkLabel(self, text=self.text, font=self.label_font, wraplength=250, anchor="n", justify="left")
+        self.about_text.grid(row=1, column=0, columnspan=2, pady=(20, 10))
+        self.developer_btn = self.hyperlink_btn(parent=self, text="Developer: rafidalhaque", fg_color="blue", url="https://rafidalhaque.github.io")
+        self.developer_btn.grid(row=2, column=0, padx=20, pady=5)
+        self.github_repo = self.hyperlink_btn(parent=self, text="GitHub Repository", fg_color="black", url="https://github.com/rafidalhaque/eml-reader")
+        self.github_repo.grid(row=2, column=1, padx=20, pady=5)
+
+    def hyperlink_btn(self, parent, text, url, fg_color, **kwargs):
+        return ctk.CTkButton(parent, text=text, font=self.label_font, fg_color=fg_color, command=lambda: webbrowser.open(url), **kwargs)
 
 class ErrorDialogue(ctk.CTkToplevel):
     def __init__(self, parent, title="Error", message="An Error Occured", **kwargs):
