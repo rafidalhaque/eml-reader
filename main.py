@@ -53,7 +53,7 @@ class App(ctk.CTk):
         try:
             email_data = parse_email.parse_email(file_path)
         except FileNotFoundError:
-            ui_design.ErrorDialogue(self, "Email File Not Found", f"{file_path} Not Found")
+            ui_design.ErrorDialogue(self, "Email File Not Found", f"{os.path.basename(file_path)} Not Found")
             return
         self.email_view.update_email(email_data)
 
@@ -61,7 +61,7 @@ class App(ctk.CTk):
         try:
             email_data = parse_email.parse_email(file_path)
         except FileNotFoundError:
-            ui_design.ErrorDialogue(self, "Email File Not Found", f"{file_path} Not Found")
+            ui_design.ErrorDialogue(self, "Email File Not Found", f"{os.path.basename(file_path)} Not Found")
             return
         self.email_view.update_email(email_data)
 
