@@ -34,6 +34,8 @@ class App(ctk.CTk):
         self.recent_files_view = RecentFilesView(self, on_file_select=self.load_from_recent_files)
         self.recent_files_view.pack()
 
+        self.refresh_recent_files()
+
     def open_file(self):
         file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
         if file_path:
@@ -46,5 +48,8 @@ class App(ctk.CTk):
         email_data = parse_email.parse_email(file_path)
         self.email_view.update_email(email_data)
 
+    def refresh_recent_files(self):
+        recent_files = self.db.get_recent_files()
+        self.recent_files_view.populate_recent_files(recent_files)
 app = App()
 app.mainloop()
