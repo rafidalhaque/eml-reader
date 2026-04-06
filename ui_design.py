@@ -29,3 +29,23 @@ class EmailViewUI(ctk.CTkFrame):
         self.body_textbox.insert("1.0", email_data['body'])
         self.body_textbox.configure(state="disabled")
 
+class RecentFilesView(ctk.CTkFrame):
+    def __init__(self, master, on_file_select, **kwargs):
+        super().__init__(master, **kwargs)
+        self.on_file_select = on_file_select
+        self.recent_files_frame = ctk.CTkScrollableFrame(self, label_text="Recent Files")
+        self.recent_files_frame.pack(fill="both", expand=True)
+
+    def populate_recent_files(self, recent_files):
+        for widget in self.recent_files_frame.winfo_children():
+            widget.destroy()
+
+        for file in recent_files:
+            id, filename, file_path, opened_at = file
+            hidden_btn = ctk.CTkButton(
+                self.recent_files_frame,
+                text=f"{filename}\t{opened_at}\n{file_path}",
+                command=lambda p=file_path: self.on_file_select(p)
+            )
+            hidden_btn.pack(fill="x", pady=2)
+
