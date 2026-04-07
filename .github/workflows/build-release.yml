@@ -14,15 +14,15 @@ jobs:
             - os: ubuntu-latest
               app_name: EmailReader-linux
               add_data: "assets:assets"
-              artifact_path: "dist/EmailReader-linux"
+              artifact_path: "dist/EmailReader-linux-${{github.ref_name}}"
             - os: macos-latest
               app_name: EmailReader-macos
               add_data: "assets:assets"
-              artifact_path: "dist/EmailReader-macos"
+              artifact_path: "dist/EmailReader-macos-${{github.ref_name}}.app"
             - os: windows-latest
               app_name: EmailReader-windows
               add_data: "assets;assets"
-              artifact_path: "dist/EmailReader-windows.exe"
+              artifact_path: "dist/EmailReader-windows-${{github.ref_name}}.exe"
       permissions:
           contents: read
       steps:
