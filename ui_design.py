@@ -23,7 +23,7 @@ class EmailViewUI(ctk.CTkFrame):
         self.to_label.pack(fill="x", expand=True, padx=10)
         self.date_label = ctk.CTkLabel(self, text="Date: ", font=self.label_font, anchor="w")
         self.date_label.pack(fill="x", expand=True, padx=10)
-        self.body_html = HtmlFrame(self, messages_enabled=False)
+        self.body_html = HtmlFrame(self, messages_enabled=False, on_link_click=self.open_external_link)
         self.body_html.pack(padx=10, pady=10, fill="both", expand=True)
 
     def update_email(self, email_data):
@@ -32,6 +32,12 @@ class EmailViewUI(ctk.CTkFrame):
         self.to_label.configure(text=f"To: {email_data["to"]}")
         self.date_label.configure(text=f"Date: {email_data["date"]}")
         self.body_html.load_html(email_data["body_html"])
+
+    def open_external_link(self, url):
+        if not url:
+            return
+        if url.startswith(("http://", "https://", "mailto:")):
+            webbrowser.open_new_tab(url)
 
 class RecentFilesView(ctk.CTkFrame):
     def __init__(self, master, on_file_select, **kwargs):
