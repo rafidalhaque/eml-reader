@@ -5,6 +5,9 @@ from textwrap import fill
 import customtkinter as ctk
 import webbrowser
 
+from tkinterweb import HtmlFrame
+
+
 class EmailViewUI(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -13,26 +16,22 @@ class EmailViewUI(ctk.CTkFrame):
     def email_ui(self):
         self.label_font = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
         self.subject_label = ctk.CTkLabel(self, text="Subject: ", font=self.label_font, anchor="w")
-        self.subject_label.pack(fill="x", expand=True)
+        self.subject_label.pack(fill="x", expand=True, padx=10)
         self.from_label = ctk.CTkLabel(self, text="From: ", font=self.label_font, anchor="w")
-        self.from_label.pack(fill="x", expand=True)
+        self.from_label.pack(fill="x", expand=True, padx=10)
         self.to_label = ctk.CTkLabel(self, text="To: ", font=self.label_font, anchor="w")
-        self.to_label.pack(fill="x", expand=True)
+        self.to_label.pack(fill="x", expand=True, padx=10)
         self.date_label = ctk.CTkLabel(self, text="Date: ", font=self.label_font, anchor="w")
-        self.date_label.pack(fill="x", expand=True)
-        self.body_textbox = ctk.CTkTextbox(self, height=500, font=self.label_font)
-        self.body_textbox.pack(pady=10, fill="both", expand=True)
-        self.body_textbox.configure(state="disabled")
+        self.date_label.pack(fill="x", expand=True, padx=10)
+        self.body_html = HtmlFrame(self, messages_enabled=False)
+        self.body_html.pack(padx=10, pady=10, fill="both", expand=True)
 
     def update_email(self, email_data):
-        self.subject_label.configure(text=f"Subject: {email_data['subject']}")
-        self.from_label.configure(text=f"From: {email_data['from']}")
-        self.to_label.configure(text=f"To: {email_data['to']}")
-        self.date_label.configure(text=f"Date: {email_data['date']}")
-        self.body_textbox.configure(state="normal")
-        self.body_textbox.delete("1.0", "end")
-        self.body_textbox.insert("1.0", email_data['body'])
-        self.body_textbox.configure(state="disabled")
+        self.subject_label.configure(text=f"Subject: {email_data["subject"]}")
+        self.from_label.configure(text=f"From: {email_data["from"]}")
+        self.to_label.configure(text=f"To: {email_data["to"]}")
+        self.date_label.configure(text=f"Date: {email_data["date"]}")
+        self.body_html.load_html(email_data["body_html"])
 
 class RecentFilesView(ctk.CTkFrame):
     def __init__(self, master, on_file_select, **kwargs):
