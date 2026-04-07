@@ -60,6 +60,7 @@ class App(ctk.CTk):
             ui_design.ErrorDialogue(self, "File Not Found", f"{os.path.basename(file_path)} file not found")
             return
         self.email_view.update_email(email_data)
+        self.refresh_recent_files()
 
     def load_from_recent_files(self, file_path):
         try:
@@ -67,7 +68,10 @@ class App(ctk.CTk):
         except FileNotFoundError:
             ui_design.ErrorDialogue(self, "File Not Found", f"{os.path.basename(file_path)} file not found")
             return
+        filename = os.path.basename(file_path)
+        self.db.save_recent_files(filename, file_path)
         self.email_view.update_email(email_data)
+        self.refresh_recent_files()
 
     def refresh_recent_files(self):
         recent_files = self.db.get_recent_files()

@@ -28,8 +28,11 @@ class DatabaseOps():
 
     def save_recent_files(self, filename, file_path):
         self.cursor.execute("""
-        INSERT OR REPLACE INTO recent_files (filename, file_path, opened_at)
+        INSERT INTO recent_files (filename, file_path, opened_at)
         VALUES (?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT (file_path) DO UPDATE SET
+            filename = excluded.filename,
+            opened_at = STRFTIME('%Y-%m-%d %H:%M:%f', 'now', 'localtime')
         """, (filename, file_path))
         self.conn.commit()
 
