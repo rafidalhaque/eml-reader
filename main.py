@@ -36,17 +36,17 @@ class App(ctk.CTk):
 
         # email view
         self.email_view = ui_design.EmailViewUI(self)
-        self.email_view.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
+        self.email_view.grid(row=1, column=1, rowspan=2, sticky="nsew", padx=10, pady=10)
 
         # recent files view
         self.recent_files_view = RecentFilesView(self, on_file_select=self.load_from_recent_files)
-        self.recent_files_view.grid(row=1, column=0, rowspan=2, sticky="nsew", padx=10, pady=10)
+        self.recent_files_view.grid(row=1, column=0, rowspan=1, sticky="nsew", padx=10, pady=10)
 
         self.refresh_recent_files()
 
         # about button
         about_btn = ctk.CTkButton(self, text="About", font=self.label_font, command=lambda: ui_design.AboutDialogue(self))
-        about_btn.grid(row=2, column=0, sticky="e", padx=10, pady=5, ipadx=10)
+        about_btn.grid(row=2, column=0, sticky="nsew", padx=10, pady=5, ipadx=10)
 
     def open_file(self):
         file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
