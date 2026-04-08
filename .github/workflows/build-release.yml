@@ -14,15 +14,12 @@ jobs:
             - os: ubuntu-latest
               app_name: EmailReader-linux
               add_data: "assets:assets"
-              artifact_path: "dist/EmailReader-linux-${{github.ref_name}}"
             - os: macos-26
               app_name: EmailReader-macos
               add_data: "assets:assets"
-              artifact_path: "dist/EmailReader-macos-${{github.ref_name}}.app"
             - os: windows-latest
               app_name: EmailReader-windows
               add_data: "assets;assets"
-              artifact_path: "dist/EmailReader-windows-${{github.ref_name}}.exe"
       permissions:
           contents: read
       steps:
@@ -44,14 +41,14 @@ jobs:
           - name: Build package
             run: >
               uv run pyinstaller --onefile --clean 
-              --noconfirm -w --name "${{ matrix.app_name }}" 
+              --noconfirm -w --name "${{ matrix.app_name }}-${{ github.ref_name }}" 
               --add-data "${{ matrix.add_data }}" main.py
 
           - name: Upload Artifact
             uses: actions/upload-artifact@v4
             with:
-              name: ${{ matrix.app_name }}
-              path: ${{ matrix.artifact_path }}
+              name: ${{ matrix.app_name }}-${{ github.ref_name }}
+              path: dist/${{ matrix.artifact_path }}-${{ github.ref_name }}*
 
     release:
         needs: build
@@ -62,7 +59,7 @@ jobs:
           - name: Download Artifact
             uses: actions/download-artifact@v4
             with:
-              pattern: "EmailReader-*-*"
+              pattern: "EmailReader-*-${{ github.ref_name }}"
               merge-multiple: 'true'
               path: release-assets
           - name: Create Release and Upload Assets
