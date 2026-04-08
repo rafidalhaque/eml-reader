@@ -15,7 +15,7 @@ jobs:
               app_name: EmailReader-linux
               add_data: "assets:assets"
               artifact_path: "dist/EmailReader-linux-${{github.ref_name}}"
-            - os: macos-latest
+            - os: macos-26
               app_name: EmailReader-macos
               add_data: "assets:assets"
               artifact_path: "dist/EmailReader-macos-${{github.ref_name}}.app"
@@ -62,7 +62,7 @@ jobs:
           - name: Download Artifact
             uses: actions/download-artifact@v4
             with:
-              pattern: "EmailReader-*"
+              pattern: "EmailReader-*-*"
               merge-multiple: 'true'
               path: release-assets
           - name: Create Release and Upload Assets
