@@ -48,7 +48,8 @@ jobs:
             uses: actions/upload-artifact@v4
             with:
               name: ${{ matrix.app_name }}-${{ github.ref_name }}
-              path: dist/${{ matrix.artifact_path }}-${{ github.ref_name }}*
+              path: dist/${{ matrix.app_name }}-${{ github.ref_name }}*
+              if-no-files-found: error
 
     release:
         needs: build
