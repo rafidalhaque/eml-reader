@@ -78,7 +78,7 @@ class RecentFilesView(ctk.CTkFrame):
             id, filename, file_path, opened_at = file
             hidden_btn = ctk.CTkButton(
                 self.recent_files_frame,
-                text=f"{filename}\t\t{opened_at}\n{file_path}",
+                text=f"{filename}\n{file_path}\n{opened_at}",
                 font=(self.font_family, 13),
                 anchor="w",
                 command=lambda p=file_path: self.on_file_select(p)
