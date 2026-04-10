@@ -5,7 +5,6 @@ import parse_email
 import ui_design
 import os
 from database import DatabaseOps
-from ui_design import RecentFilesView
 
 
 class App(ctk.CTk):
@@ -24,6 +23,7 @@ class App(ctk.CTk):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=3)
+        self.grid_columnconfigure(2, weight=3)
         self.grid_rowconfigure(1, weight=0)
         self.grid_rowconfigure(2, weight=1)
 
@@ -40,8 +40,12 @@ class App(ctk.CTk):
         self.email_view = ui_design.EmailViewUI(self)
         self.email_view.grid(row=1, column=1, rowspan=3, sticky="nsew", padx=10, pady=10)
 
+        # attachments view
+        self.attachments_view = ui_design.AttachmentsView(self)
+        self.attachments_view.grid(row=1, column=2, rowspan=3, sticky="nsew", padx=10, pady=5, ipadx=10)
+
         # recent files view
-        self.recent_files_view = RecentFilesView(self, on_file_select=self.load_from_recent_files)
+        self.recent_files_view = ui_design.RecentFilesView(self, on_file_select=self.load_from_recent_files)
         self.recent_files_view.grid(row=2, column=0, rowspan=1, sticky="nsew", padx=10, pady=5)
 
         self.refresh_recent_files()
@@ -62,6 +66,7 @@ class App(ctk.CTk):
             ui_design.ErrorDialogue(self, "File Not Found", f"{os.path.basename(file_path)} file not found")
             return
         self.email_view.update_email(email_data)
+        self.attachments_view.get_attachments(email_data)
         self.refresh_recent_files()
 
     def load_from_recent_files(self, file_path):
@@ -73,6 +78,7 @@ class App(ctk.CTk):
         filename = os.path.basename(file_path)
         self.db.save_recent_files(filename, file_path)
         self.email_view.update_email(email_data)
+        self.attachments_view.get_attachments(email_data)
         self.refresh_recent_files()
 
     def refresh_recent_files(self):

@@ -1,7 +1,4 @@
 # ui_design.py
-from cmath import exp
-from textwrap import fill
-
 import customtkinter as ctk
 import webbrowser
 
@@ -39,6 +36,32 @@ class EmailViewUI(ctk.CTkFrame):
         if url.startswith(("http://", "https://", "mailto:")):
             webbrowser.open_new_tab(url)
 
+class AttachmentsView(ctk.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        self.font_family = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
+        self.attachments_ui()
+
+    def attachments_ui(self):
+        self.attachments_frame = ctk.CTkScrollableFrame(self, label_text="Attachments", label_font=self.font_family)
+        self.attachments_frame.pack(fill="both", expand=True)
+
+    def get_attachments(self, email_data):
+        for widget in self.attachments_frame.winfo_children():
+            widget.destroy()
+        attachments = email_data["attachments"]
+        for attachment in attachments:
+            filename, filesize = attachment
+            attachment_text = ctk.CTkLabel(
+                self.attachments_frame,
+                text=f"File Name: {filename}\nFile Size: {filesize}\n",
+                font=self.font_family,
+                wraplength=300,
+                anchor="w",
+                justify="left"
+            )
+            attachment_text.pack(fill="x", expand=True)
+
 class RecentFilesView(ctk.CTkFrame):
     def __init__(self, master, on_file_select, **kwargs):
         super().__init__(master, **kwargs)
@@ -57,6 +80,7 @@ class RecentFilesView(ctk.CTkFrame):
                 self.recent_files_frame,
                 text=f"{filename}\t\t{opened_at}\n{file_path}",
                 font=(self.font_family, 13),
+                anchor="w",
                 command=lambda p=file_path: self.on_file_select(p)
             )
             hidden_btn.pack(fill="x", pady=5)
