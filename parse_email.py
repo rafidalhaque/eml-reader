@@ -46,6 +46,15 @@ def parse_email(file):
     if not html_body:
         html_body = "<p><em>No body exists.</em></p>"
 
+    attachments = []
+    for attachment in eml_data.walk():
+        filename = attachment.get_filename()
+        if filename is None:
+            continue
+        payload = attachment.get_payload(decode=True)
+        filesize = len(payload) if payload else 0
+        attachments.append((filename, filesize))
+
     return {
         "subject": str(eml_data["Subject"] or ""),
         "from": str(eml_data["From"] or ""),
@@ -53,4 +62,5 @@ def parse_email(file):
         "date": str(eml_data["Date"] or ""),
         "body_html": html_body,
         "body_plain": plain_body or "",
+        "attachments": attachments,
     }
