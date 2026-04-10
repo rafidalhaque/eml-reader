@@ -55,7 +55,7 @@ class AttachmentsView(ctk.CTkFrame):
             attachment_text = ctk.CTkLabel(
                 self.attachments_frame,
                 text=f"File Name: {filename}\nFile Size: {filesize}\n",
-                font=self.font_family,
+                font=(self.font_family, 15, "normal"),
                 wraplength=300,
                 anchor="w",
                 justify="left"
