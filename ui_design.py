@@ -46,6 +46,16 @@ class AttachmentsView(ctk.CTkFrame):
         self.attachments_frame = ctk.CTkScrollableFrame(self, label_text="Attachments", label_font=self.font_family)
         self.attachments_frame.pack(fill="both", expand=True)
 
+    def make_filesize_readable(self, filesize):
+        if filesize < 1024:
+            return f"{filesize} B"
+        elif filesize < 1024 * 1024:
+            filesize = filesize / 1024
+            return f"{filesize:.2f} KB"
+        else:
+            filesize = filesize / (1024 * 1024)
+            return f"{filesize:.2f} MB"
+
     def get_attachments(self, email_data):
         for widget in self.attachments_frame.winfo_children():
             widget.destroy()
@@ -54,7 +64,7 @@ class AttachmentsView(ctk.CTkFrame):
             filename, filesize = attachment
             attachment_text = ctk.CTkLabel(
                 self.attachments_frame,
-                text=f"File Name: {filename}\nFile Size: {filesize}\n",
+                text=f"File Name: {filename}\nFile Size: {self.make_filesize_readable(filesize)}\n",
                 font=(self.font_family, 15, "normal"),
                 wraplength=300,
                 anchor="w",
