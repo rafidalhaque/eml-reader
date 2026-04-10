@@ -24,29 +24,31 @@ class App(ctk.CTk):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=3)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=1)
 
         self.name_font = ctk.CTkFont(family="Roboto Mono", size=20, weight="bold")
         self.name = ctk.CTkLabel(self, text="Email Reader", fg_color="transparent", padx=10, font=self.name_font)
         self.name.grid(row=0, column=0, columnspan=2, sticky="w", padx=10, pady=5, ipadx=10, ipady=5)
+
         # open file button
         self.label_font = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
         open_file_btn = ctk.CTkButton(self, text="Open file", font=self.label_font, command=self.open_file)
-        open_file_btn.grid(row=0, column=1, sticky="e", padx=10, pady=5, ipadx=10, ipady=5)
+        open_file_btn.grid(row=1, column=0, sticky="new", padx=10, pady=5, ipadx=10, ipady=5)
 
         # email view
         self.email_view = ui_design.EmailViewUI(self)
-        self.email_view.grid(row=1, column=1, rowspan=2, sticky="nsew", padx=10, pady=10)
+        self.email_view.grid(row=1, column=1, rowspan=3, sticky="nsew", padx=10, pady=10)
 
         # recent files view
         self.recent_files_view = RecentFilesView(self, on_file_select=self.load_from_recent_files)
-        self.recent_files_view.grid(row=1, column=0, rowspan=1, sticky="nsew", padx=10, pady=10)
+        self.recent_files_view.grid(row=2, column=0, rowspan=1, sticky="nsew", padx=10, pady=5)
 
         self.refresh_recent_files()
 
         # about button
         about_btn = ctk.CTkButton(self, text="About", font=self.label_font, command=lambda: ui_design.AboutDialogue(self))
-        about_btn.grid(row=2, column=0, sticky="nsew", padx=10, pady=5, ipadx=10)
+        about_btn.grid(row=3, column=0, sticky="nsew", padx=10, pady=5, ipadx=10)
 
     def open_file(self):
         file_path = ctk.filedialog.askopenfilename(filetypes=[("Email files", "*.eml")])
