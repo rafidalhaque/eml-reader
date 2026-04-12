@@ -176,7 +176,6 @@ class EmailHeadersWindow(ctk.CTkToplevel):
                 height=35
             )
             header_name.grid(row=index + 2, column=0, sticky="nsew", padx=5, pady=5)
-            print(index, header_name, value)
             header_name.insert("0.0", name)
             header_name.configure(state="disabled")
             value_textbox = ctk.CTkTextbox(
