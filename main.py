@@ -40,9 +40,14 @@ class App(ctk.CTk):
         self.email_view = ui_design.EmailViewUI(self)
         self.email_view.grid(row=1, column=1, rowspan=3, sticky="nsew", padx=10, pady=10)
 
+        # email headers button
+        self.current_email_data = None
+        headers_btn = ctk.CTkButton(self, text="Email Headers", font=self.label_font, command=lambda: ui_design.EmailHeadersWindow(self, self.current_email_data))
+        headers_btn.grid(row=1, column=2, sticky="nsew", padx=10, pady=5, ipadx=10)
+
         # attachments view
         self.attachments_view = ui_design.AttachmentsView(self)
-        self.attachments_view.grid(row=1, column=2, rowspan=3, sticky="nsew", padx=10, pady=5, ipadx=10)
+        self.attachments_view.grid(row=2, column=2, rowspan=3, sticky="nsew", padx=10, pady=5, ipadx=10)
 
         # recent files view
         self.recent_files_view = ui_design.RecentFilesView(self, on_file_select=self.load_from_recent_files)
@@ -67,6 +72,7 @@ class App(ctk.CTk):
             return
         self.email_view.update_email(email_data)
         self.attachments_view.get_attachments(email_data)
+        self.current_email_data = email_data
         self.refresh_recent_files()
 
     def load_from_recent_files(self, file_path):
@@ -79,6 +85,7 @@ class App(ctk.CTk):
         self.db.save_recent_files(filename, file_path)
         self.email_view.update_email(email_data)
         self.attachments_view.get_attachments(email_data)
+        self.current_email_data = email_data
         self.refresh_recent_files()
 
     def refresh_recent_files(self):

@@ -1,4 +1,6 @@
 # ui_design.py
+from textwrap import wrap
+
 import customtkinter as ctk
 import webbrowser
 
@@ -129,17 +131,65 @@ class ErrorDialogue(ctk.CTkToplevel):
 
         self.label_font = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
         self.message_label = ctk.CTkLabel(self, text=message, font=self.label_font, anchor="w", wraplength=300)
-        self.message_label.pack(padx=20, pady=(20, 5),expand=True)
+        self.message_label.pack(padx=20, pady=(20, 5), expand=True)
         self.ok_button = ctk.CTkButton(self, text="OK", font=self.label_font, command=self.destroy)
         self.ok_button.pack(pady=(0, 20))
 
-class ToplevelWindow(ctk.CTkToplevel):
-    def __init__(self, parent, **kwargs):
+class EmailHeadersWindow(ctk.CTkToplevel):
+    def __init__(self, parent, current_email_data, **kwargs):
         super().__init__(parent, **kwargs)
-        self.geometry("400x300")
-        self.label = ctk.CTkLabel(self, text="Top")
-        self.label.pack(fill="x", expand=True)
+        self.x = 800
+        self.y = 600
+        self.title("Email Headers | Email Reader")
+        self.geometry(f"{self.x}x{self.y}")
+        self.font_family = ctk.CTkFont(family="Roboto Mono", size=15, weight="bold")
+        self.resizable(False, False)
+        self.columnconfigure(0, weight=0, minsize=200)
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.headers_ui(parent=self)
+        self.current_email_data = current_email_data
+        self.get_headers_info(self.current_email_data)
+        self.grab_set()
 
-    def show_error(self, title, message):
-        ErrorDialogue(self, title=title, message=message)
+    def headers_ui(self, parent, **kwargs):
+        self.header_frame = ctk.CTkScrollableFrame(parent, label_text="Email Headers", label_font=self.font_family)
+        self.header_frame.grid(row=0, column=0, columnspan=2, pady=(20, 10), sticky="nsew")
+        self.header_frame.columnconfigure(0, weight=0, minsize=200)
+        self.header_frame.columnconfigure(1, weight=1)
+    def get_headers_info(self, email_data):
+        for widget in self.header_frame.winfo_children():
+            widget.destroy()
+        self.header_heading = ctk.CTkLabel(self.header_frame, text="Headers", font=self.font_family, anchor="center")
+        self.header_heading.grid(row=1, column=0, pady=(20, 10))
+        self.value_heading = ctk.CTkLabel(self.header_frame, text="Values", font=self.font_family, anchor="center")
+        self.value_heading.grid(row=1, column=1, pady=(20, 10))
+        headers = email_data["other_headers"]
+        for index, header in enumerate(headers):
+            name, value = header
+            header_name = ctk.CTkTextbox(
+                self.header_frame,
+                font=(self.font_family, 13, "normal"),
+                border_color="black",
+                border_width=1,
+                border_spacing=10,
+                height=35
+            )
+            header_name.grid(row=index + 2, column=0, sticky="nsew", padx=5, pady=5)
+            print(index, header_name, value)
+            header_name.insert("0.0", name)
+            header_name.configure(state="disabled")
+            value_textbox = ctk.CTkTextbox(
+                self.header_frame,
+                font=(self.font_family, 13, "normal"),
+                border_color="black",
+                border_width=1,
+                border_spacing=10,
+                height=35
+            )
+            value_textbox.grid(row=index + 2, column=1, sticky="nsew", padx=5, pady=5)
+            value_textbox.insert("0.0", value)
+            value_textbox.configure(state="disabled")
+
+
 

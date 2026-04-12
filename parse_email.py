@@ -2,7 +2,7 @@ from email import message, parser, policy, contentmanager, header
 from pathlib import Path
 from html.parser import HTMLParser
 import html as html_lib
-from ui_design import ToplevelWindow
+
 
 
 class StripHTML(HTMLParser):
