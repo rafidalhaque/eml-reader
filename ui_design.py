@@ -147,15 +147,19 @@ class EmailHeadersWindow(ctk.CTkToplevel):
         self.columnconfigure(0, weight=0, minsize=200)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=0)
         self.headers_ui(parent=self)
         self.current_email_data = current_email_data
         self.get_headers_info(self.current_email_data)
         self.grab_set()
 
+        self.ok_button = ctk.CTkButton(self, text="OK", font=self.font_family, command=self.destroy)
+        self.ok_button.grid(row=1, column=0, columnspan=2, pady=10)
+
     def headers_ui(self, parent, **kwargs):
         self.header_frame = ctk.CTkScrollableFrame(parent, label_text="Email Headers", label_font=self.font_family)
         self.header_frame.grid(row=0, column=0, columnspan=2, pady=(20, 10), sticky="nsew")
-        self.header_frame.columnconfigure(0, weight=0, minsize=200)
+        self.header_frame.columnconfigure(0, weight=0, minsize=250)
         self.header_frame.columnconfigure(1, weight=1)
     def get_headers_info(self, email_data):
         for widget in self.header_frame.winfo_children():
