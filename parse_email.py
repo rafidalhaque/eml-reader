@@ -55,6 +55,12 @@ def parse_email(file):
         filesize = len(payload) if payload else 0
         attachments.append((filename, filesize))
 
+    headers = [
+        (name, value)
+        for name, value in eml_data.items()
+        if name not in ["Subject", "From", "To", "Date"]
+    ]
+
     return {
         "subject": str(eml_data["Subject"] or ""),
         "from": str(eml_data["From"] or ""),
@@ -63,4 +69,5 @@ def parse_email(file):
         "body_html": html_body,
         "body_plain": plain_body or "",
         "attachments": attachments,
+        "other_headers": headers,
     }
